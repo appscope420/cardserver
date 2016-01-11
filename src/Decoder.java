@@ -7,14 +7,23 @@ import java.io.InputStreamReader;
 
 import org.json.*;
 
-public class Decoder {
+public class Decoder 
+{
+	private String database;
 	
 	public Decoder()
 	{
-		
+		try { database = readDatabase("database.json"); }
+		catch(Exception e) {}
 	}
 	
-	public static void main(String [ ] args) throws Exception
+	public Decoder(String dbname)
+	{
+		try { database = readDatabase(dbname); }
+		catch(Exception e) {}
+	}
+	
+	public static void main(String [] args) throws Exception
 	{
 		Card kappa = testmethode(101);
 		System.out.println(kappa.name + " " + kappa.type);
@@ -35,19 +44,19 @@ public class Decoder {
 				{
 					String name = temp.getString("name"); 
 					String type = temp.getString("type"); 
-					int hp = temp.getInt("def");
+					int def = temp.getInt("def");
 					int atk = temp.getInt("attack");
 					int cost = temp.getInt("cost");
-					returnThis = new Card(cardid, name, type, hp, atk, cost);
+					returnThis = new Card(cardid, name, type, def, atk, cost);
 				}
 		}
 			
 		return returnThis;
 	}
 	
-	public String readDatabase() throws FileNotFoundException, IOException
+	public String readDatabase(String filename) throws FileNotFoundException, IOException
 	{
-		File txt = new File("database.json");
+		File txt = new File(filename);
 		String json = "";
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(txt)));
@@ -89,8 +98,9 @@ public class Decoder {
 		return array;
 	}
 	
-	public Card getCard(String json, int cardid)
+	public Card getCard(int cardid)
 	{
+		String json = database;
 		Card returnThis = null;
 				
 		JSONObject db = new JSONObject(json);
@@ -104,10 +114,10 @@ public class Decoder {
 				{
 					String name = temp.getString("name"); 
 					String type = temp.getString("type"); 
-					int hp = temp.getInt("hp");
+					int def = temp.getInt("def");
 					int atk = temp.getInt("attack");
 					int cost = temp.getInt("cost");
-					returnThis = new Card(cardid, name, type, hp, atk, cost);
+					returnThis = new Card(cardid, name, type, def, atk, cost);
 				}
 		}
 			
