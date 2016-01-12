@@ -26,7 +26,7 @@ public class Decoder
 	public static void main(String [] args) throws Exception
 	{
 		Card kappa = testmethode(101);
-		System.out.println(kappa.name + " " + kappa.type);
+		System.out.println(kappa.getName() + " " + kappa.getType());
 	}
 	
 	public static Card testmethode(int cardid) throws FileNotFoundException, IOException
@@ -43,11 +43,12 @@ public class Decoder
 				if(cardid == compare)
 				{
 					String name = temp.getString("name"); 
-					String type = temp.getString("type"); 
+					String type = temp.getString("type");
+					String subtype = temp.getString("subtype");
 					int def = temp.getInt("def");
 					int atk = temp.getInt("attack");
 					int cost = temp.getInt("cost");
-					returnThis = new Card(cardid, name, type, def, atk, cost);
+					returnThis = new Card(cardid, name, type, subtype, def, atk, cost);
 				}
 		}
 			
@@ -113,11 +114,12 @@ public class Decoder
 				if(cardid == compare)
 				{
 					String name = temp.getString("name"); 
-					String type = temp.getString("type"); 
+					String type = temp.getString("type");
+					String subtype = temp.getString("subtype"); 
 					int def = temp.getInt("def");
 					int atk = temp.getInt("attack");
 					int cost = temp.getInt("cost");
-					returnThis = new Card(cardid, name, type, def, atk, cost);
+					returnThis = new Card(cardid, name, type, subtype, def, atk, cost);
 				}
 		}
 			
