@@ -7,6 +7,7 @@ public class Card
 	int atk;
 	int cost;
 	
+	//Test123
 	public Card(int id, String name, String type, int def, int atk, int cost)
 	{
 		this.id = id;
