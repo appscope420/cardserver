@@ -24,7 +24,8 @@ public class ConnectionHandler extends Thread
 
 	public void run() 
 	{
-		try {
+		try 
+		{
 			System.out.println(IPg + " has connected");
 			in = new BufferedReader(new InputStreamReader(Client.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(Client.getOutputStream()));
@@ -34,23 +35,33 @@ public class ConnectionHandler extends Thread
 			sIP = sIP.substring(1);
 			IPg = sIP;
 			String JSONdeck = in.readLine();
-			if (checkDeckValidity(JSONdeck)) {
-				if (server.Lobbys.lastElement().Player2 == null) {
+			if (checkDeckValidity(JSONdeck)) 
+			{
+				if (server.Lobbys.lastElement().p2 == null) 
+				{
 					Lobby = server.Lobbys.lastElement();
-					server.Lobbys.lastElement().Player2 = this;
+					server.Lobbys.lastElement().p2 = this;
 					Lobby.start();
-				} else {
+				} 
+				else 
+				{
 					Lobby = new Lobby(this, null);
 					server.Lobbys.addElement(Lobby);
 				}
 
-				while ((string = in.readLine()) != null) {
+				while ((string = in.readLine()) != null) 
+				{
 					System.out.println(IPg + ":" + string);
+					process(string);
 				}
-			} else {
+			} 
+			else 
+			{
 				Client.close();
 			}
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			System.out.println(IPg + " has disconnected");
 		}
 	}
@@ -72,8 +83,13 @@ public class ConnectionHandler extends Thread
 		
 	}
 
-	public void begin() 
+	public void send(String msg) 
 	{
-
+       
+	}
+	
+	public void process(String code)
+	{
+		
 	}
 }
