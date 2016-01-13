@@ -98,7 +98,7 @@ public class ConnectionHandler extends Thread
 				write(json);
 				break;
 			case "REFRESH":
-				write(json); // not done yet; needs json-creation method
+				write(json); // not done yet; needs json-creation method  {code:refresh, slot:int, id:int}
 				break;
 			case "GAME_OVER_WIN":
 				write("{\"code\":\"GAME_OVER_WIN\"}");

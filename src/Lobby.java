@@ -46,11 +46,13 @@ public class Lobby extends Thread {
 			b_hand.addCard(draw2);
 		}
 		
-		//deck.toArray(), übergeben an array to json methode, übergeben an send
 		String hand1 = a_hand.deckToJson();
-		String hand2 = b_hand.deckToJson();
+		String hand2 = b_hand.deckToJson();		
 		p1.send("REFRESH_HAND", hand1);
 		p2.send("REFRESH_HAND", hand2);
+		
+		//wait for both players "CARD_PLACED" (max 3)
+		//then start game
 		
 	}
 
