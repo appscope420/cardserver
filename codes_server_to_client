@@ -1,0 +1,36 @@
+{
+  "code": "REFRESH",
+  "slot": 0-15,
+  "id": 0
+}
+
+// slot IDs:
+0 = active monster
+1 = monster slot 1
+2 = monster slot 2
+3 = monster slot 3
+4 = reserve monster
+5 = spell slot 1
+6 = spell slot 2
+7 = spell slot 3
+8 = enemy active monster
+9 = enemy monster slot 1
+10 = enemy monster slot 2
+11 = enemy monster slot 3
+12 = enemy reserve monster
+13 = enemy spell slot 1
+14 = enemy spell slot 2
+15 = enemy spell slot 3
+
+{
+  "code": "WAIT"
+}
+
+{
+  "code": "GAME_OVER_WIN"
+}
+
+{
+  "code": "GAME_OVER_LOSS"
+}
+
