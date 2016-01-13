@@ -25,8 +25,15 @@ public class Decoder
 	
 	public static void main(String [] args) throws Exception
 	{
-		Card kappa = testmethode(101);
-		System.out.println(kappa.getName() + " " + kappa.getType());
+		/*Card kappa = testmethode(101);
+		System.out.println(kappa.getName() + " " + kappa.getType());*/
+		String myString = new JSONStringer()
+			     .object()
+			         .key("code").value("REFRESH_HAND")
+			         .key("cards").array().object().key("id").value(2).endObject().object().key("id").value(5).endObject().endArray()
+			     .endObject()
+			     .toString();
+		System.out.println(myString);
 	}
 	
 	public static Card testmethode(int cardid) throws FileNotFoundException, IOException
@@ -124,6 +131,45 @@ public class Decoder
 		}
 			
 		return returnThis;
+	}
+	
+	public String getCode(String json)
+	{
+		String returnThis = "";
+		int id = 0;
+		int slot = 0;
+		
+		JSONObject obj = new JSONObject(json);
+		returnThis = obj.getString("code");
+		if(returnThis == "CARD_PLACED")
+		{
+			id = obj.getInt("id");
+			slot = obj.getInt("slot");
+		}
+
+		return returnThis;
+	}
+	
+	public int getCodeExtra(String json, String var)
+	{
+		String returnThis;
+		int id = 0;
+		int slot = 0;
+		
+		JSONObject obj = new JSONObject(json);
+		returnThis = obj.getString("code");
+		if(returnThis == "CARD_PLACED")
+		{
+			id = obj.getInt("id");
+			slot = obj.getInt("slot");
+		}
+
+		switch(var)
+		{
+			case "id": return id;
+			case "slot": return slot;
+			default: return 0; 	
+		}
 	}
 	
 }

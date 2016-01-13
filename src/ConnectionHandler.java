@@ -13,7 +13,7 @@ public class ConnectionHandler extends Thread
 	private BufferedWriter out;
 	private Socket Client;
 	private String IPg = "Could not detect IP";
-	Lobby Lobby;
+	Lobby lobby;
 	Server server;
 	Deck deck;
 
@@ -39,14 +39,16 @@ public class ConnectionHandler extends Thread
 			{
 				if (server.Lobbys.lastElement().p2 == null) 
 				{
-					Lobby = server.Lobbys.lastElement();
+					lobby = server.Lobbys.lastElement();
 					server.Lobbys.lastElement().p2 = this;
-					Lobby.start();
+					lobby.setDeckP2(deck);
+					lobby.start();
 				} 
 				else 
 				{
-					Lobby = new Lobby(this, null);
-					server.Lobbys.addElement(Lobby);
+					lobby = new Lobby(this, null);
+					server.Lobbys.addElement(lobby);
+					lobby.setDeckP1(deck);
 				}
 
 				while ((string = in.readLine()) != null) 
@@ -73,23 +75,77 @@ public class ConnectionHandler extends Thread
 		Deck cdeck = new Deck(deckint, dec);
 		if(cdeck.isValid())
 		{
+			System.out.println("Deck valid");
 			deck = cdeck;
 			return true;
 		}
 		else
 		{
+			System.out.println("Deck invalid");
 			return false;
 		}
 		
 	}
 
-	public void send(String msg) 
+	public void send(String code, String json) 
 	{
-       
+		switch(code)
+		{
+			case "GAME_START":
+				write("{\"code\":\"GAME_START\"}");
+				break;
+			case "REFRESH_HAND":
+				write(json);
+				break;
+			case "REFRESH":
+				write(json); // not done yet; needs json-creation method
+				break;
+			case "GAME_OVER_WIN":
+				write("{\"code\":\"GAME_OVER_WIN\"}");
+				break;
+			case "GAME_OVER_LOSS":
+				write("{\"code\":\"GAME_OVER_LOSS\"}");
+				break;
+		}
+		      
 	}
 	
-	public void process(String code)
+	public void write(String msg)
 	{
+		try 
+	       {
+	    	   out.write(msg);
+	       }
+	       catch(Exception e) 
+	       {
+	    	   System.out.println("rip BufferedWriter");
+	       }
+	}
+	
+	public void process(String json)
+	{
+		Decoder dec = new Decoder();
+		String code = dec.getCode(json);
 		
+		switch(code)
+		{
+			case "READY_GAME_START": 
+				
+				break;
+			case "CARD_PLACED":
+				int id = dec.getCodeExtra(json, "id");
+				int slot = dec.getCodeExtra(json, "slot");
+				Card card = dec.getCard(id);
+				int player = lobby.getPlayerId(IPg);
+				lobby.placeCard(card, slot, player);
+				break;
+			default: 
+				break;
+		}
+	}
+	
+	public String getIp()
+	{
+		return IPg;
 	}
 }

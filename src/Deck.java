@@ -1,30 +1,69 @@
 import java.util.Random;
+import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
+
+import org.json.JSONStringer;
 
 public class Deck 
 {
-	
-	Card[] myDeck;
+	private Vector<Card> deck;
 	Decoder dec;
-	public Deck(int[] deck, Decoder dec)
+	
+	public Deck(Decoder dec)
 	{
-		createDeck(deck);
+		deck = new Vector<Card>();
 		this.dec = dec;
 	}
 	
-	private void createDeck(int[] deck)
+	public Deck(int[] pDeck, Decoder dec)
 	{
-		for(int i = 0; i < deck.length; i++)
+		deck = new Vector<Card>();
+		this.dec = dec;
+		createDeck(pDeck);
+	}
+	
+	public Card[] getDeck()
+	{
+		Card[] toReturn = new Card[deck.size()];
+		for(int i = 0; i < deck.size(); i++)
 		{
-			myDeck[i] = dec.getCard(deck[i]);
+			toReturn[i] = deck.elementAt(i);
+		}
+		return toReturn;
+	}
+	
+	public String deckToJson()
+	{
+		Card[] array = getDeck();
+		String json = "{\"code\":\"REFRESH_HAND\",\"cards\":[";
+		
+		for(int i = 0; i < array.length; i++)
+		{
+			Card temp = array[i];
+			json = json + "{\"id\":" + temp.getId() + "}";
+			if(i < (array.length - 1))
+				json = json + ",";
+		}
+		
+		json = json + "]}";		
+		
+		return json;
+	}
+	
+	private void createDeck(int[] pDeck)
+	{
+		for(int i = 0; i < pDeck.length; i++)
+		{
+			Card toAdd = dec.getCard(pDeck[i]);
+			deck.add(toAdd);
 		}
 	}
 	
 	public boolean isValid()
 	{
-		for(int i = 0; i < myDeck.length; i++)
+		for(int i = 0; i < deck.size(); i++)
 		{
-			if(myDeck[i] == null)
+			if(deck.elementAt(i) == null)
 			{
 				return false;
 			}
@@ -32,7 +71,8 @@ public class Deck
 		return true;
 	}
 	
-	public void shuffle()
+	// for Array-based structure; is now Vector-based
+	/*public void shuffle()
 	{
 		Random rnd = ThreadLocalRandom.current();
 	    for (int i = 29; i > 0; i--)
@@ -42,5 +82,30 @@ public class Deck
 	      myDeck[index] = myDeck[i];
 	      myDeck[i] = x;
 	    }
+	}*/
+	
+	public int random(int i)
+	{
+	    Random gen = ThreadLocalRandom.current();
+	    int rn = gen.nextInt(i);
+	    return rn;
+	}
+	
+	public Card drawCard()
+	{
+		int temp = random(deck.size());
+		Card card = deck.elementAt(temp);
+		deck.removeElementAt(temp);
+		return card;
+	}
+	
+	public void addCard(Card pCard)
+	{
+		deck.addElement(pCard);
+	}
+	
+	public int getSize()
+	{
+		return deck.size();
 	}
 }
