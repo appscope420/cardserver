@@ -34,3 +34,19 @@
   "code": "GAME_OVER_LOSS"
 }
 
+{
+  "code": "REFRESH_HAND"
+  "cards": [
+  {
+    "id": 1
+  },
+  {
+    "id": 5
+  },
+  {
+    "id": 14
+  }
+  ]
+} // Card Anzahl variabel
+  
+
