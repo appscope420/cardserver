@@ -36,19 +36,17 @@ public class ConnectionHandler extends Thread
 			sIP = sIP.substring(1);
 			IPg = sIP;
 			System.out.println(IPg + " has connected");
-			//String JSONdeck = in.readLine();
-			String JSONdeck = "{\"c1\": \"1\",\"c2\": \"1\",\"c3\": \"2\",\"c4\": \"2\",\"c5\": \"3\",\"c6\": \"3\",\"c7\": \"4\",\"c8\": \"4\",\"c9\": \"5\",\"c10\": \"5\",\"c11\": \"6\",\"c12\": \"6\",\"c13\": \"7\",\"c14\": \"7\",\"c15\": \"8\",\"c16\": \"8\",\"c17\": \"9\",\"c18\":\"9\",\"c19\": \"10\",\"c20\": \"10\",\"c21\": \"11\",\"c22\": \"11\",\"c23\": \"12\",\"c24\": \"26\",\"c25\":\"13\",\"c26\": \"13\",\"c27\": \"14\",\"c28\": \"14\",\"c29\": \"15\",\"c30\": \"15\"}";
+			String JSONdeck = in.readLine();
+			// Let client connect and send Deck JSON immediately
+			//String JSONdeck = "{\"c1\": \"1\",\"c2\": \"1\",\"c3\": \"2\",\"c4\": \"2\",\"c5\": \"3\",\"c6\": \"3\",\"c7\": \"4\",\"c8\": \"4\",\"c9\": \"5\",\"c10\": \"5\",\"c11\": \"6\",\"c12\": \"6\",\"c13\": \"7\",\"c14\": \"7\",\"c15\": \"8\",\"c16\": \"8\",\"c17\": \"9\",\"c18\":\"9\",\"c19\": \"10\",\"c20\": \"10\",\"c21\": \"11\",\"c22\": \"11\",\"c23\": \"12\",\"c24\": \"26\",\"c25\":\"13\",\"c26\": \"13\",\"c27\": \"14\",\"c28\": \"14\",\"c29\": \"15\",\"c30\": \"15\"}";
 			if (checkDeckValidity(JSONdeck)) 
 			{
-				System.out.println("checkpoint 1");
 				if(server.Lobbys.isEmpty())
 				{
-					System.out.println("checkpoint 2");
 					lobby = new Lobby(this, null);
 					server.Lobbys.addElement(lobby);
 					lobby.setDeckP1(deck);
 					pId = 1;
-					System.out.println("checkpoint 3");
 				}
 				else
 				{			
@@ -69,12 +67,8 @@ public class ConnectionHandler extends Thread
 					} 
 				}
 				
-				System.out.println("checkpoint 4");
-				System.out.println("Reader ID: " + in);
-				System.out.println("XXX:" + in.readLine() + ":XXX");
 				while ((string = in.readLine()) != null) 
 				{
-					System.out.println("checkpoint 5");
 					System.out.println(IPg + ": " + string);
 					process(string);
 				}
@@ -147,12 +141,20 @@ public class ConnectionHandler extends Thread
 	public void process(String json)
 	{
 		Decoder dec = new Decoder();
-		String code = dec.getCode(json);
+		String code = "";
+		try 
+		{
+			code = dec.getCode(json);
+		}
+		catch(JSONException je)
+		{
+			System.out.println("JSON or bye");
+		}
 		
 		switch(code)
 		{
 			case "READY_GAME_START": 
-				
+				System.out.println("GJ");
 				break;
 			case "CARD_PLACED":
 				int id = dec.getCodeExtra(json, "id");

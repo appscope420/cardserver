@@ -57,6 +57,11 @@ public class Lobby extends Thread {
 	
 	public void startGame()
 	{
+		Decoder decoder = new Decoder();
+		a_hand = new Deck(decoder);
+		b_hand = new Deck(decoder);
+		a_used = new Deck(decoder);
+		b_used = new Deck(decoder);
 		p1.send("GAME_START", "");
 		p2.send("GAME_START", "");
 		

@@ -29,6 +29,14 @@ public class ClientTest extends Thread
                  System.out.println("Connection Established");
                  out.write(name + "\n");
                  out.flush();
+                 int i = 0;
+                 while(true)
+                 {
+                	 if(i < 2)
+                	 {
+                		 out.write("{\"code\":\"READY_GAME_START\"}" + "\n"); out.flush(); i++;
+                	 }
+                 }
              }
              catch (UnknownHostException e)
              {
