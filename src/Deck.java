@@ -104,6 +104,20 @@ public class Deck
 		deck.addElement(pCard);
 	}
 	
+	public void removeCard(int cId)
+	{
+		for(int i = 0; i < deck.size(); i++)
+		{
+			Card temp = deck.elementAt(i);
+			int tId = temp.getId();
+			if(tId == cId)
+			{
+				deck.removeElementAt(i);
+				break;
+			}
+		}
+	}
+	
 	public int getSize()
 	{
 		return deck.size();

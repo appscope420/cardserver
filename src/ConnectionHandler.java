@@ -16,6 +16,7 @@ public class ConnectionHandler extends Thread
 	Lobby lobby;
 	Server server;
 	Deck deck;
+	int pId;
 
 	public ConnectionHandler(Socket s, Server server) 
 	{
@@ -42,6 +43,7 @@ public class ConnectionHandler extends Thread
 					lobby = server.Lobbys.lastElement();
 					server.Lobbys.lastElement().p2 = this;
 					lobby.setDeckP2(deck);
+					pId = 2;
 					lobby.start();
 				} 
 				else 
@@ -49,6 +51,7 @@ public class ConnectionHandler extends Thread
 					lobby = new Lobby(this, null);
 					server.Lobbys.addElement(lobby);
 					lobby.setDeckP1(deck);
+					pId = 1;
 				}
 
 				while ((string = in.readLine()) != null) 
@@ -136,8 +139,11 @@ public class ConnectionHandler extends Thread
 				int id = dec.getCodeExtra(json, "id");
 				int slot = dec.getCodeExtra(json, "slot");
 				Card card = dec.getCard(id);
-				int player = lobby.getPlayerId(IPg);
+				int player = pId;
 				lobby.placeCard(card, slot, player);
+				break;
+			case "FOLD_TURN":
+				lobby.readyState(pId);
 				break;
 			default: 
 				break;
@@ -148,4 +154,21 @@ public class ConnectionHandler extends Thread
 	{
 		return IPg;
 	}
+	
+	public void waitForCardsPlaced()
+	{
+		String string;
+		try 
+		{
+			while ((string = in.readLine()) != null) 
+			{
+				if(string.equals("Cards_placed"))
+				{
+					//
+				}	
+			}
+		}
+		catch(Exception e) {}
+	}
+	
 }

@@ -1,4 +1,5 @@
 import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
 
 public class Lobby extends Thread {
 	
@@ -18,7 +19,16 @@ public class Lobby extends Thread {
 	
 	private int a_hp = 100;
 	private int b_hp = 100;
+	
+	CountDownLatch cd = new CountDownLatch(0);
+	
 	private int playerTurn = 0; // 0 = both, 1 = player1, 2 = player2
+	boolean p1rdy = false;
+	boolean p2rdy = false;
+	boolean gameStarted = false;
+	boolean gameOver = false;
+	boolean battlePhase = false;
+	
 	
 	
 	public Lobby(ConnectionHandler player1, ConnectionHandler player2)
@@ -29,7 +39,21 @@ public class Lobby extends Thread {
 	
 	public void run()
 	{
-		startGame();
+		try 
+		{
+			startGame();
+			cd.await();
+			while(!gameOver)
+			{
+				
+			}
+		}
+		catch(Exception e)
+		{
+			
+		}
+			
+		
 	}
 	
 	public void startGame()
@@ -53,7 +77,27 @@ public class Lobby extends Thread {
 		
 		//wait for both players "CARD_PLACED" (max 3)
 		//then start game
-		
+	}
+	
+	public synchronized void readyState(int id)
+	{
+		if(!gameStarted)
+		{
+			if(id == 1)
+				p1rdy = true;
+			else
+				p2rdy = true;
+			if(p1rdy && p2rdy)
+			{
+				gameStarted = true;
+				p1rdy = false; p2rdy = false;
+				cd.countDown();
+			}
+		}
+		else if(true)
+		{
+			
+		}
 	}
 
 	public void setDeckP1(Deck deck)
@@ -72,7 +116,13 @@ public class Lobby extends Thread {
 		{
 			if(slotId >= 0 && slotId < 8 && playerTurn != 2)
 			{
-				a[slotId] = card;
+				if(a[slotId] == null && inHand(card, 1))
+				{
+					a[slotId] = card;
+					a_hand.removeCard(card.getId());
+				}
+				else
+					System.out.println("Slot \"" + slotId + "\" occupied.");
 			}
 			else
 			{
@@ -83,7 +133,13 @@ public class Lobby extends Thread {
 		{
 			if(slotId >= 0 && slotId < 8 && playerTurn != 1)
 			{
-				b[slotId] = card;
+				if(b[slotId] == null && inHand(card, 2))
+				{
+					b[slotId] = card;
+					b_hand.removeCard(card.getId());
+				}
+				else
+					System.out.println("Slot \"" + slotId + "\" occupied.");
 			}
 			else
 			{
@@ -103,4 +159,67 @@ public class Lobby extends Thread {
 		else 
 			return 2;
 	}
+	
+	public void setTurn(int p)
+	{
+		playerTurn = p;
+	}
+	public int getTurn()
+	{
+		return playerTurn;
+	}
+	
+	public boolean inHand(Card card, int pId) //check for mistakes Kappa
+	{
+		int cardid = card.getId();
+		if(pId == 1)
+		{
+			Card[] array = a_hand.getDeck();
+			for(int i = 0; i < array.length; i++)
+			{
+				if(array[i] != null)
+				{
+					int handid = array[i].getId();
+					if(handid == cardid)
+					{
+						return true;
+					}
+				}
+			}
+		}
+		else
+		{
+			Card[] array = b_hand.getDeck();
+			for(int i = 0; i < array.length; i++)
+			{
+				if(array[i] != null)
+				{
+					int handid = array[i].getId();
+					if(handid == cardid)
+					{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public void clearBoard()
+	{
+		for(int i = 0; i < a.length; i++)
+		{
+			if(i == 0 || i == 5 || i == 6 || i == 7)
+			{
+				if(a[i] != null)
+				{
+					Card temp = a[i];
+					a_used.addCard(temp);
+					a[i] = null;
+				}
+			}
+		}
+	}
+	
+	
 }
