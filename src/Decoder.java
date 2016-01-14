@@ -23,10 +23,10 @@ public class Decoder
 		catch(Exception e) {}
 	}
 	
-	public static void main(String [] args) throws Exception
+	/*public static void main(String [] args) throws Exception
 	{
 		/*Card kappa = testmethode(101);
-		System.out.println(kappa.getName() + " " + kappa.getType());*/
+		System.out.println(kappa.getName() + " " + kappa.getType());
 		String myString = new JSONStringer()
 			     .object()
 			         .key("code").value("REFRESH_HAND")
@@ -60,7 +60,7 @@ public class Decoder
 		}
 			
 		return returnThis;
-	}
+	}*/
 	
 	public String readDatabase(String filename) throws FileNotFoundException, IOException
 	{

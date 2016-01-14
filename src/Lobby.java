@@ -30,7 +30,6 @@ public class Lobby extends Thread {
 	boolean battlePhase = false;
 	
 	
-	
 	public Lobby(ConnectionHandler player1, ConnectionHandler player2)
 	{
 		this.p1 = player1;

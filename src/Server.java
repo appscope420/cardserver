@@ -10,7 +10,7 @@ public class Server extends Thread
     
     public Server(int port)
     {
-        this.port = port;
+        this.port = port;     
     }
     
     public void run()
@@ -25,6 +25,7 @@ public class Server extends Thread
                 System.out.println("Server: Waiting for connection");
                 client = server.accept();
                 ConnectionHandler c = new ConnectionHandler(client, this);
+                System.out.println("Server: Connection established.");
                 c.start();
             }
         } 

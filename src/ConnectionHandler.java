@@ -21,13 +21,13 @@ public class ConnectionHandler extends Thread
 	public ConnectionHandler(Socket s, Server server) 
 	{
 		Client = s;
+		this.server = server;
 	}
 
 	public void run() 
 	{
 		try 
 		{
-			System.out.println(IPg + " has connected");
 			in = new BufferedReader(new InputStreamReader(Client.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(Client.getOutputStream()));
 			String string;
@@ -35,28 +35,47 @@ public class ConnectionHandler extends Thread
 			String sIP = IP.toString();
 			sIP = sIP.substring(1);
 			IPg = sIP;
-			String JSONdeck = in.readLine();
+			System.out.println(IPg + " has connected");
+			//String JSONdeck = in.readLine();
+			String JSONdeck = "{\"c1\": \"1\",\"c2\": \"1\",\"c3\": \"2\",\"c4\": \"2\",\"c5\": \"3\",\"c6\": \"3\",\"c7\": \"4\",\"c8\": \"4\",\"c9\": \"5\",\"c10\": \"5\",\"c11\": \"6\",\"c12\": \"6\",\"c13\": \"7\",\"c14\": \"7\",\"c15\": \"8\",\"c16\": \"8\",\"c17\": \"9\",\"c18\":\"9\",\"c19\": \"10\",\"c20\": \"10\",\"c21\": \"11\",\"c22\": \"11\",\"c23\": \"12\",\"c24\": \"26\",\"c25\":\"13\",\"c26\": \"13\",\"c27\": \"14\",\"c28\": \"14\",\"c29\": \"15\",\"c30\": \"15\"}";
 			if (checkDeckValidity(JSONdeck)) 
 			{
-				if (server.Lobbys.lastElement().p2 == null) 
+				System.out.println("checkpoint 1");
+				if(server.Lobbys.isEmpty())
 				{
-					lobby = server.Lobbys.lastElement();
-					server.Lobbys.lastElement().p2 = this;
-					lobby.setDeckP2(deck);
-					pId = 2;
-					lobby.start();
-				} 
-				else 
-				{
+					System.out.println("checkpoint 2");
 					lobby = new Lobby(this, null);
 					server.Lobbys.addElement(lobby);
 					lobby.setDeckP1(deck);
 					pId = 1;
+					System.out.println("checkpoint 3");
 				}
-
+				else
+				{			
+					if(server.Lobbys.lastElement().p2 == null) 
+					{
+						lobby = server.Lobbys.lastElement();
+						server.Lobbys.lastElement().p2 = this;
+						lobby.setDeckP2(deck);
+						pId = 2;
+						lobby.start();
+					}
+					else 
+					{				
+						lobby = new Lobby(this, null);
+						server.Lobbys.addElement(lobby);
+						lobby.setDeckP1(deck);
+						pId = 1;
+					} 
+				}
+				
+				System.out.println("checkpoint 4");
+				System.out.println("Reader ID: " + in);
+				System.out.println("XXX:" + in.readLine() + ":XXX");
 				while ((string = in.readLine()) != null) 
 				{
-					System.out.println(IPg + ":" + string);
+					System.out.println("checkpoint 5");
+					System.out.println(IPg + ": " + string);
 					process(string);
 				}
 			} 
