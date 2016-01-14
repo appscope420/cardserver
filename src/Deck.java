@@ -93,19 +93,14 @@ public class Deck
 	
 	public Card drawCard()
 	{
-		System.out.println("now get random from deck size");
 		int temp = random(deck.size());
-		System.out.println("now getelementat random#");
 		Card card = deck.elementAt(temp);
-		System.out.println("now remove element at");
 		deck.removeElementAt(temp);
-		System.out.println("now return");
 		return card;
 	}
 	
 	public void addCard(Card pCard)
 	{
-		System.out.println("LOL?");
 		deck.addElement(pCard);
 	}
 	

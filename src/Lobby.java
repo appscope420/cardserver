@@ -28,6 +28,10 @@ public class Lobby extends Thread {
 	boolean gameStarted = false;
 	boolean gameOver = false;
 	boolean battlePhase = false;
+	boolean cardPhase = false;
+	int count = 0;
+	int aCanPlace = 3;
+	int bCanPlace = 3;
 	
 	
 	public Lobby(ConnectionHandler player1, ConnectionHandler player2)
@@ -40,8 +44,26 @@ public class Lobby extends Thread {
 	{
 		try 
 		{
+			System.out.println("Game start");
 			startGame();
 			cd.await();
+			System.out.println("Both players placed cards and folded");
+
+			for(int i = 1; i < 4; i++)
+			{
+				if(a[i] != null)
+					System.out.println(a[i].getId());
+				else
+					System.out.println("a[i] is null");
+			}
+			for(int i = 1; i < 4; i++)
+			{
+				if(b[i] != null)
+					System.out.println(b[i].getId());
+				else
+					System.out.println("b[i] is null");
+			}
+			
 			while(!gameOver)
 			{
 				
@@ -55,7 +77,7 @@ public class Lobby extends Thread {
 		
 	}
 	
-	public void startGame()
+	public synchronized void startGame()
 	{
 		Decoder decoder = new Decoder();
 		a_hand = new Deck(decoder);
@@ -81,6 +103,7 @@ public class Lobby extends Thread {
 		
 		//wait for both players "CARD_PLACED" (max 3)
 		//then start game
+		cardPhase = true;
 	}
 	
 	public synchronized void readyState(int id)
@@ -114,48 +137,60 @@ public class Lobby extends Thread {
 		b_deck = deck;
 	}
 	
-	public void placeCard(Card card, int slotId, int playerId) // playerId is 1 or 2
+	public synchronized void placeCard(Card card, int slotId, int playerId) // playerId is 1 or 2
 	{
-		if(playerId == 1)
+		if(cardPhase)
 		{
-			if(slotId >= 0 && slotId < 8 && playerTurn != 2)
+			if(playerId == 1 && aCanPlace > 0)
 			{
-				if(a[slotId] == null && inHand(card, 1))
+				if(slotId >= 0 && slotId < 8 && playerTurn != 2)
 				{
-					a[slotId] = card;
-					a_hand.removeCard(card.getId());
+					if(a[slotId] == null && inHand(card, 1))
+					{
+						a[slotId] = card;
+						a_hand.removeCard(card.getId());
+						aCanPlace--;
+					}
+					else
+						System.out.println("Slot \"" + slotId + "\" occupied.");
 				}
 				else
-					System.out.println("Slot \"" + slotId + "\" occupied.");
-			}
-			else
-			{
-				System.out.println("Invalid Slot ID: \"" + slotId + "\"" + " or not Player 1's turn.");
-			}
-		}
-		else if(playerId == 2)
-		{
-			if(slotId >= 0 && slotId < 8 && playerTurn != 1)
-			{
-				if(b[slotId] == null && inHand(card, 2))
 				{
-					b[slotId] = card;
-					b_hand.removeCard(card.getId());
+					System.out.println("Invalid Slot ID: \"" + slotId + "\"" + " or not Player 1's turn.");
+				}
+			}
+			else if(playerId == 2 && bCanPlace > 0)
+			{
+				if(slotId >= 0 && slotId < 8 && playerTurn != 1)
+				{
+					if(b[slotId] == null && inHand(card, 2))
+					{
+						b[slotId] = card;
+						b_hand.removeCard(card.getId());
+						bCanPlace--;
+					}
+					else
+						System.out.println("Slot \"" + slotId + "\" occupied.");
 				}
 				else
-					System.out.println("Slot \"" + slotId + "\" occupied.");
+				{
+					System.out.println("Invalid Slot ID: \"" + slotId + "\"" + " or not Player 2's turn.");
+				}
 			}
-			else
+			else 
 			{
-				System.out.println("Invalid Slot ID: \"" + slotId + "\"" + " or not Player 2's turn.");
+				System.out.println("Invalid Player ID: \"" + playerId + "\"");
 			}
-		}
-		else 
-		{
-			System.out.println("Invalid Player ID: \"" + playerId + "\"");
+			
+			if(aCanPlace == 0 && bCanPlace == 0)
+			{
+				cardPhase = false;
+				
+			}
+			
 		}
 	}
-	
+		
 	public int getPlayerId(String ip)
 	{
 		if(p1.getIp() == ip)

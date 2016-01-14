@@ -32,9 +32,29 @@ public class ClientTest extends Thread
                  int i = 0;
                  while(true)
                  {
-                	 if(i < 2)
+                	 if(i % 1000 == 0)
                 	 {
-                		 out.write("{\"code\":\"READY_GAME_START\"}" + "\n"); out.flush(); i++;
+                		 out.write("{\"code\":\"FOLD_TURN\"}" + " \n"); 
+                		 out.flush(); 
+                		 i++; 
+                	 }
+                	 else if(i % 5 == 1)
+                	 {
+                		 out.write("{\"code\":\"CARD_PLACED\",\"slot\":1, \"id\":4}" + " \n"); 
+                		 out.flush(); 
+                		 i++; 
+                	 }
+                	 else if(i % 5 == 2)
+                	 {
+                		 out.write("{\"code\":\"CARD_PLACED\",\"slot\":2, \"id\":3}" + " \n"); 
+                		 out.flush(); 
+                		 i++; 
+                	 }
+                	 else if(i % 5 == 3)
+                	 {
+                		 out.write("{\"code\":\"CARD_PLACED\",\"slot\":3, \"id\":7}" + " \n"); 
+                		 out.flush(); 
+                		 i++; 
                 	 }
                  }
              }

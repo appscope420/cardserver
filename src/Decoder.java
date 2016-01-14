@@ -158,7 +158,7 @@ public class Decoder
 		
 		JSONObject obj = new JSONObject(json);
 		returnThis = obj.getString("code");
-		if(returnThis == "CARD_PLACED")
+		if(returnThis.equals("CARD_PLACED"))
 		{
 			id = obj.getInt("id");
 			slot = obj.getInt("slot");
