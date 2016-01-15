@@ -66,7 +66,7 @@ public class Lobby extends Thread {
 			
 			while(!gameOver)
 			{
-				
+				System.out.println("I have been training since before I was born, and today is the day. Today is the day I spam");
 			}
 		}
 		catch(Exception e)
@@ -242,6 +242,41 @@ public class Lobby extends Thread {
 			}
 		}
 		return false;
+	}
+	
+	public void executeBattlePhase()
+	{
+		Card a_active = new Card(0, "null", "monster", "none", 0, 0, 0);
+		Card b_active = new Card(0, "null", "monster", "none", 0, 0, 0);
+		
+		if(a[0] != null)
+		{
+			a_active = a[0];
+		}
+		if(b[0] != null)
+		{
+			b_active = b[0];
+		}
+		
+		int a_dmg = a_active.getAtk() - b_active.getDef();
+		int b_dmg = b_active.getAtk() - a_active.getDef();
+		
+		if(a_dmg >= 0)
+		{
+			b_hp = b_hp - a_dmg;
+		}
+		else
+		{
+			a_hp = a_hp + a_dmg;
+		}
+		if(b_dmg >= 0)
+		{
+			a_hp = a_hp - b_dmg;
+		}
+		else
+		{
+			b_hp = b_hp + b_dmg;
+		}
 	}
 	
 	public void clearBoard()

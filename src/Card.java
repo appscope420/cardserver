@@ -44,9 +44,19 @@ public class Card
 		return def;
 	}
 	
+	public void setDef(int p)
+	{
+		def = p;
+	}
+	
 	public int getAtk()
 	{ 
 		return atk;
+	}
+	
+	public void setAtk(int p)
+	{
+		atk = p;
 	}
 	
 	public int getCost()

@@ -133,7 +133,8 @@ public class ConnectionHandler extends Thread
 	{
 		try 
 	       {
-	    	   out.write(msg);
+	    	   out.write(msg + " \n");
+	    	   out.flush();
 	       }
 	       catch(Exception e) 
 	       {

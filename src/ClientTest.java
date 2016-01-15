@@ -24,12 +24,15 @@ public class ClientTest extends Thread
              {
                  socket = new Socket(ip, port);
                  BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                 Reader rrr = new Reader(in);
                  out.flush();
                  IOE = true;
                  System.out.println("Connection Established");
-                 out.write(name + "\n");
+                 out.write("{\"c1\": \"1\",\"c2\": \"1\",\"c3\": \"2\",\"c4\": \"2\",\"c5\": \"3\",\"c6\": \"3\",\"c7\": \"4\",\"c8\": \"4\",\"c9\": \"5\",\"c10\": \"5\",\"c11\": \"6\",\"c12\": \"6\",\"c13\": \"7\",\"c14\": \"7\",\"c15\": \"8\",\"c16\": \"8\",\"c17\": \"9\",\"c18\":\"9\",\"c19\": \"10\",\"c20\": \"10\",\"c21\": \"11\",\"c22\": \"11\",\"c23\": \"12\",\"c24\": \"26\",\"c25\":\"13\",\"c26\": \"13\",\"c27\": \"14\",\"c28\": \"14\",\"c29\": \"15\",\"c30\": \"15\"}" + "\n");
                  out.flush();
                  int i = 0;
+                 
                  while(true)
                  {
                 	 if(i % 1000 == 0)
