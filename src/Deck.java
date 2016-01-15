@@ -54,7 +54,7 @@ public class Deck
 	{
 		for(int i = 0; i < pDeck.length; i++)
 		{
-			Card toAdd = dec.getCard(0);
+			Card toAdd = dec.getCard(pDeck[i]);
 			if(toAdd != null)
 				deck.add(toAdd);
 		}
