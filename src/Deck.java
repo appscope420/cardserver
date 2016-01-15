@@ -54,19 +54,22 @@ public class Deck
 	{
 		for(int i = 0; i < pDeck.length; i++)
 		{
-			Card toAdd = dec.getCard(pDeck[i]);
-			deck.add(toAdd);
+			Card toAdd = dec.getCard(0);
+			if(toAdd != null)
+				deck.add(toAdd);
 		}
 	}
 	
-	public boolean isValid()
+	public boolean isValid() // needs some work
 	{
+		if(deck.size() < 30)
+			return false;
 		for(int i = 0; i < deck.size(); i++)
 		{
 			if(deck.elementAt(i) == null)
 			{
 				return false;
-			}
+			}		
 		}
 		return true;
 	}
