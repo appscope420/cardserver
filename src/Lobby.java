@@ -20,7 +20,7 @@ public class Lobby extends Thread {
 	private int a_hp = 100;
 	private int b_hp = 100;
 	
-	CountDownLatch cd = new CountDownLatch(0);
+	CountDownLatch cd = new CountDownLatch(1);
 	
 	private int playerTurn = 0; // 0 = both, 1 = player1, 2 = player2
 	boolean p1rdy = false;
@@ -208,7 +208,7 @@ public class Lobby extends Thread {
 		return playerTurn;
 	}
 	
-	public boolean inHand(Card card, int pId) //check for mistakes Kappa
+	public synchronized boolean inHand(Card card, int pId) //check for mistakes Kappa
 	{
 		int cardid = card.getId();
 		if(pId == 1)

@@ -69,7 +69,7 @@ public class ConnectionHandler extends Thread
 				
 				while ((string = in.readLine()) != null) 
 				{
-					//System.out.println(IPg + ": " + string);
+					System.out.println(IPg + "(" + pId + "):" + string);
 					process(string);
 				}
 			} 
@@ -107,6 +107,9 @@ public class ConnectionHandler extends Thread
 	{
 		switch(code)
 		{
+			case "CONNECTED":
+				
+				break;
 			case "GAME_START":
 				write("{\"code\":\"GAME_START\"}");
 				break;
